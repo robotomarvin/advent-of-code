@@ -1,15 +1,6 @@
-ranges,ids = ($<.map(&:chomp)*"\n").split("\n\n").map(&:split)
-ranges.map!{|x|x.split('-').map(&:to_i)}
-ranges.sort_by!{|x| x[0]}
-
-sum = 0
-top_right = 0
-ranges.each do |left, right|
-	new_left = [left, top_right + 1].max
-	next if new_left > right
-	top_right = right
-	sum += right - new_left + 1
-end
-
-p sum
-
+p ($<.map(&:chomp)*"\n").split("\n\n")[0].split.map{|x|x.split('-').map(&:to_i)}.sort_by{|x| x[0]}.reduce([0,0]) {|c,r|
+	sum,top_right = c
+	left,right = r
+	left = [left, top_right + 1].max
+	left > right ? [sum,top_right] : [sum + right - left + 1, right]
+}[0]
